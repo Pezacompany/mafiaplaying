@@ -1,0 +1,381 @@
+:root {
+  --bg: #101114;
+  --panel: #1b1d22;
+  --panel-2: #24272e;
+  --text: #f6f1e8;
+  --muted: #a6adb8;
+  --line: #353944;
+  --red: #c83e4d;
+  --gold: #d7a84d;
+  --green: #4ea66b;
+  --blue: #5c8fd9;
+  --ink: #111217;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 18% 10%, rgba(200, 62, 77, 0.16), transparent 34rem),
+    linear-gradient(135deg, #101114 0%, #18191d 52%, #151010 100%);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--red);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+}
+
+button:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+button.secondary {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+}
+
+button.ghost {
+  min-height: 36px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 0.45rem 0.75rem;
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #111318;
+  color: var(--text);
+  min-height: 44px;
+  padding: 0.75rem;
+}
+
+label {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  max-width: 780px;
+  font-size: clamp(2.2rem, 6vw, 5.8rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+h2 {
+  font-size: 1.1rem;
+}
+
+.shell {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.hero {
+  min-height: 33vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.codePanel {
+  min-width: 190px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(27, 29, 34, 0.86);
+  padding: 1rem;
+  text-align: center;
+}
+
+.codePanel span,
+.muted {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.codePanel strong {
+  display: block;
+  color: var(--gold);
+  font-size: 2.4rem;
+  letter-spacing: 0.1em;
+  margin-top: 0.25rem;
+}
+
+.entryGrid,
+.gameGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.entryGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.gameGrid {
+  grid-template-columns: 0.9fr 1.35fr 1fr;
+  align-items: start;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(27, 29, 34, 0.92);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  padding: 1rem;
+}
+
+form.panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.alert {
+  border: 1px solid rgba(200, 62, 77, 0.45);
+  border-radius: 8px;
+  background: rgba(200, 62, 77, 0.14);
+  color: #ffd9df;
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem;
+}
+
+.statusPanel,
+.controlPanel,
+.logPanel {
+  display: grid;
+  gap: 1rem;
+}
+
+.roomHeader,
+.sectionHeader,
+.buttonRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.sectionHeader span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.roleCard {
+  min-height: 128px;
+  border-radius: 8px;
+  display: grid;
+  align-content: end;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #2b2f39, #191b20);
+  border: 1px solid var(--line);
+}
+
+.roleCard span,
+.roleCard small {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.roleCard strong {
+  font-size: 1.8rem;
+}
+
+.roleCard.mafia {
+  background: linear-gradient(135deg, #451922, #1b1114);
+}
+
+.roleCard.doctor {
+  background: linear-gradient(135deg, #1f4b34, #121b17);
+}
+
+.roleCard.detective {
+  background: linear-gradient(135deg, #233f6a, #121722);
+}
+
+.roleCard.town {
+  background: linear-gradient(135deg, #5c4722, #1c1710);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.stats span,
+.voteBox span,
+.resultBox {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-2);
+  padding: 0.7rem;
+  text-align: center;
+}
+
+.players {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.player {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #15171c;
+  min-height: 54px;
+  padding: 0.7rem;
+}
+
+.player.dead {
+  opacity: 0.55;
+}
+
+.player em {
+  color: var(--gold);
+  font-style: normal;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.45rem;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.12rem 0.45rem;
+}
+
+.settings {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.hint {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.voteBox,
+.manualList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.logPanel {
+  grid-column: 1 / -1;
+}
+
+.log {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+
+details {
+  border-top: 1px solid var(--line);
+  padding-top: 0.9rem;
+}
+
+summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+
+@media (max-width: 920px) {
+  .hero {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .entryGrid,
+  .gameGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats,
+  .settings {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .shell {
+    width: min(100% - 1rem, 1180px);
+    padding-top: 1rem;
+  }
+
+  .hero {
+    min-height: 24vh;
+    padding-top: 1rem;
+  }
+
+  h1 {
+    font-size: 2.35rem;
+  }
+
+  .player,
+  .buttonRow,
+  .roomHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .player {
+    grid-template-columns: 1fr;
+  }
+}
