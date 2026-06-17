@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { gamesCollection } from "../../../lib/db";
-import { event, makeCode, makePlayer, makeToken, publicGame } from "../../../lib/game";
+import { getGamesCollection } from "../../../lib/store";
+import { event, makeCode, makePlayer, makeToken, normalizeCode, publicGame } from "../../../lib/game";
 
 export const dynamic = "force-dynamic";
 
@@ -10,13 +10,14 @@ export async function POST(request) {
     const hostName = String(body.hostName || "Host").trim().slice(0, 28);
     const host = makePlayer(hostName || "Host");
     const hostToken = makeToken();
-    const games = await gamesCollection();
+    const games = await getGamesCollection();
 
     let game;
     for (let attempt = 0; attempt < 8; attempt += 1) {
       const code = makeCode();
       game = {
         code,
+        codeNormalized: normalizeCode(code),
         hostToken,
         phase: "lobby",
         step: "waiting",

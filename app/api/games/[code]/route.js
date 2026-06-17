@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { gamesCollection } from "../../../../lib/db";
+import { findGameByCode } from "../../../../lib/store";
 import {
   advanceGame,
   assertHost,
   assertPlayer,
   eliminate,
-  normalizeCode,
   publicGame,
   resetToLobby,
   startGame,
@@ -19,7 +18,7 @@ export async function GET(request, { params }) {
   try {
     const { code } = await params;
     const token = request.nextUrl.searchParams.get("token");
-    const game = await findGame(code);
+    const { game } = await findGameByCode(code);
     return NextResponse.json({ game: publicGame(game, token) });
   } catch (error) {
     return NextResponse.json({ error: error.message || "Nie znaleziono gry." }, { status: error.status || 500 });
@@ -31,8 +30,7 @@ export async function PATCH(request, { params }) {
     const { code } = await params;
     const body = await request.json();
     const token = body.token;
-    const games = await gamesCollection();
-    const game = await findGame(code);
+    const { game, games } = await findGameByCode(code);
 
     if (body.action === "start") {
       assertHost(game, token);
@@ -57,20 +55,9 @@ export async function PATCH(request, { params }) {
     }
 
     game.updatedAt = new Date();
-    await games.replaceOne({ code: game.code }, game);
+    await games.replaceOne({ _id: game._id }, game);
     return NextResponse.json({ game: publicGame(game, token) });
   } catch (error) {
     return NextResponse.json({ error: error.message || "Błąd akcji gry." }, { status: error.status || 500 });
   }
-}
-
-async function findGame(code) {
-  const games = await gamesCollection();
-  const game = await games.findOne({ code: normalizeCode(code) });
-  if (!game) {
-    const error = new Error("Nie znaleziono pokoju o takim kodzie.");
-    error.status = 404;
-    throw error;
-  }
-  return game;
 }

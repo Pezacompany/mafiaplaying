@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { gamesCollection } from "../../../../../lib/db";
 import { event, makePlayer, normalizeCode, publicGame } from "../../../../../lib/game";
+import { findGameByCode } from "../../../../../lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -14,13 +14,8 @@ export async function POST(request, { params }) {
       return NextResponse.json({ error: "Podaj nick." }, { status: 400 });
     }
 
-    const games = await gamesCollection();
     const code = normalizeCode(routeCode || body.code);
-    const game = await games.findOne({ code });
-
-    if (!game) {
-      return NextResponse.json({ error: "Nie znaleziono pokoju o takim kodzie." }, { status: 404 });
-    }
+    const { game, games } = await findGameByCode(code);
 
     if (game.phase !== "lobby") {
       return NextResponse.json({ error: "Ta gra już wystartowała." }, { status: 400 });
@@ -35,7 +30,8 @@ export async function POST(request, { params }) {
     game.log = [event(`${player.nick} dołącza do lobby.`), ...(game.log || [])].slice(0, 80);
     game.updatedAt = new Date();
 
-    await games.replaceOne({ code }, game);
+    game.codeNormalized = normalizeCode(game.code);
+    await games.replaceOne({ _id: game._id }, game);
     return NextResponse.json({
       code,
       token: player.token,

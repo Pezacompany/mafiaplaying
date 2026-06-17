@@ -32,6 +32,11 @@ export default function Home() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const roomFromUrl = new URLSearchParams(window.location.search).get("room");
+    if (roomFromUrl) {
+      setJoinCode(roomFromUrl.toUpperCase());
+    }
+
     const saved = JSON.parse(localStorage.getItem("mafia-session") || "null");
     if (saved?.code && saved?.token) {
       setCode(saved.code);
@@ -49,6 +54,10 @@ export default function Home() {
 
   const alivePlayers = useMemo(() => game?.players.filter((player) => player.alive) || [], [game]);
   const voteSummary = useMemo(() => countVotes(game), [game]);
+  const inviteUrl = useMemo(() => {
+    if (!game?.code || typeof window === "undefined") return "";
+    return `${window.location.origin}?room=${game.code}`;
+  }, [game?.code]);
   const isHost = game?.me?.isHost;
   const me = game?.me;
 
@@ -199,6 +208,16 @@ export default function Home() {
               <strong>{isHost ? "Narrator" : roleLabels[me?.role] || "Czekaj na start"}</strong>
               {me?.team && <small>Drużyna: {me.team === "mafia" ? "Mafia" : "Miasto"}</small>}
             </div>
+
+            {isHost && inviteUrl && (
+              <div className="inviteBox">
+                <span>Link zaproszenia</span>
+                <input value={inviteUrl} readOnly />
+                <button className="secondary" onClick={() => navigator.clipboard?.writeText(inviteUrl)}>
+                  Kopiuj link
+                </button>
+              </div>
+            )}
 
             <div className="stats">
               <span>Dzień {game.day || 0}</span>

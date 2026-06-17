@@ -247,6 +247,16 @@ form.panel {
   gap: 0.5rem;
 }
 
+.inviteBox {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.inviteBox span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .stats span,
 .voteBox span,
 .resultBox {
