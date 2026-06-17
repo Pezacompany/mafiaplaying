@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request, { params }) {
   try {
+    const { code: routeCode } = await params;
     const body = await request.json();
     const nick = String(body.nick || "").trim().slice(0, 28);
 
@@ -14,7 +15,7 @@ export async function POST(request, { params }) {
     }
 
     const games = await gamesCollection();
-    const code = String(params.code || "").toUpperCase();
+    const code = String(routeCode || "").trim().toUpperCase();
     const game = await games.findOne({ code });
 
     if (!game) {

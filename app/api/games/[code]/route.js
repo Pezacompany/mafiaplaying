@@ -16,8 +16,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request, { params }) {
   try {
+    const { code } = await params;
     const token = request.nextUrl.searchParams.get("token");
-    const game = await findGame(params.code);
+    const game = await findGame(code);
     return NextResponse.json({ game: publicGame(game, token) });
   } catch (error) {
     return NextResponse.json({ error: error.message || "Nie znaleziono gry." }, { status: error.status || 500 });
@@ -26,10 +27,11 @@ export async function GET(request, { params }) {
 
 export async function PATCH(request, { params }) {
   try {
+    const { code } = await params;
     const body = await request.json();
     const token = body.token;
     const games = await gamesCollection();
-    const game = await findGame(params.code);
+    const game = await findGame(code);
 
     if (body.action === "start") {
       assertHost(game, token);
@@ -63,7 +65,7 @@ export async function PATCH(request, { params }) {
 
 async function findGame(code) {
   const games = await gamesCollection();
-  const game = await games.findOne({ code: String(code || "").toUpperCase() });
+  const game = await games.findOne({ code: String(code || "").trim().toUpperCase() });
   if (!game) {
     const error = new Error("Nie znaleziono pokoju o takim kodzie.");
     error.status = 404;
