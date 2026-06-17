@@ -5,6 +5,7 @@ import {
   assertHost,
   assertPlayer,
   eliminate,
+  normalizeCode,
   publicGame,
   resetToLobby,
   startGame,
@@ -65,7 +66,7 @@ export async function PATCH(request, { params }) {
 
 async function findGame(code) {
   const games = await gamesCollection();
-  const game = await games.findOne({ code: String(code || "").trim().toUpperCase() });
+  const game = await games.findOne({ code: normalizeCode(code) });
   if (!game) {
     const error = new Error("Nie znaleziono pokoju o takim kodzie.");
     error.status = 404;

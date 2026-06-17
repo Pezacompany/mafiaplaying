@@ -1,25 +1,31 @@
 import { NextResponse } from "next/server";
-import { gamesCollection } from "../../../../../lib/db";
-import { event, makePlayer, normalizeCode, publicGame } from "../../../../../lib/game";
+import { gamesCollection } from "../../../../lib/db";
+import { event, makePlayer, normalizeCode, publicGame } from "../../../../lib/game";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request, { params }) {
+export async function POST(request) {
   try {
-    const { code: routeCode } = await params;
     const body = await request.json();
+    const code = normalizeCode(body.code);
     const nick = String(body.nick || "").trim().slice(0, 28);
+
+    if (!code) {
+      return NextResponse.json({ error: "Podaj kod pokoju." }, { status: 400 });
+    }
 
     if (!nick) {
       return NextResponse.json({ error: "Podaj nick." }, { status: 400 });
     }
 
     const games = await gamesCollection();
-    const code = normalizeCode(routeCode || body.code);
     const game = await games.findOne({ code });
 
     if (!game) {
-      return NextResponse.json({ error: "Nie znaleziono pokoju o takim kodzie." }, { status: 404 });
+      return NextResponse.json(
+        { error: `Nie znaleziono pokoju ${code}. Sprawdź, czy host utworzył pokój na tej samej stronie.` },
+        { status: 404 }
+      );
     }
 
     if (game.phase !== "lobby") {

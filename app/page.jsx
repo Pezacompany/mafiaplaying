@@ -109,9 +109,9 @@ export default function Home() {
   async function joinGame(event) {
     event.preventDefault();
     const nextCode = joinCode.trim().toUpperCase();
-    const data = await request(`/api/games/${nextCode}/join`, {
+    const data = await request("/api/games/join", {
       method: "POST",
-      body: JSON.stringify({ nick })
+      body: JSON.stringify({ code: nextCode, nick })
     });
     persist(data.code, data.token);
   }
